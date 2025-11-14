@@ -62,6 +62,13 @@
             padding: 10px;
         }
     </style>
+    <style>
+        .category-icon {
+            width: 40px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+    </style>
 </head>
 <body>
     <header>Accueil Salle Informatique</header>
@@ -82,7 +89,13 @@
     <script>
         let password = "enseignant"; // À sécuriser côté serveur dans un vrai environnement
 
-        const categories = ["CP", "CE1", "CE2", "CM1", "CM2"]; // Temp
+        const categories = [
+            { name: "CP", icon: "https://cdn-icons-png.flaticon.com/512/201/201623.png" },
+            { name: "CE1", icon: "https://cdn-icons-png.flaticon.com/512/2907/2907253.png" },
+            { name: "CE2", icon: "https://cdn-icons-png.flaticon.com/512/2995/2995620.png" },
+            { name: "CM1", icon: "https://cdn-icons-png.flaticon.com/512/1345/1345874.png" },
+            { name: "CM2", icon: "https://cdn-icons-png.flaticon.com/512/1345/1345883.png" }
+        ]; // Temp
         const links = [
             { title: "Site Mathématiques", url: "https://exemple.com", img: "https://via.placeholder.com/200", cats: ["CP", "CE1"] },
             { title: "Lecture", url: "https://exemple.com", img: "https://via.placeholder.com/200", cats: ["CE2", "CM1", "CM2"] }
@@ -94,7 +107,7 @@
             categories.forEach(c => {
                 const b = document.createElement("button");
                 b.className = "filter-btn";
-                b.textContent = c;
+                b.innerHTML = `<img class="category-icon" src="${c.icon}">${c.name}`;
                 b.onclick = () => renderLinks(c);
                 f.appendChild(b);
             });
