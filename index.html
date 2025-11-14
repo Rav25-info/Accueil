@@ -1,1 +1,105 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Accueil – Salle informatique</title>
+<style>
+/* === FULL MODERN VERSION WITH IMAGES, NO URL DISPLAY === */
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fa;color:#222}
+header{background:linear-gradient(135deg,#4f8cff,#7f5dff);color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:1.8rem}
+#filters{display:flex;gap:10px;flex-wrap:wrap;padding:15px;justify-content:center}
+.filter-btn{padding:10px 15px;border:none;border-radius:12px;background:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:1rem;box-shadow:0 3px 6px rgba(0,0,0,0.15)}
+.filter-btn.active{background:#ffd766}
+.category-icon{width:32px;height:32px}
+#links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;padding:20px;}
+.card{background:#fff;border-radius:16px;box-shadow:0 4px 10px rgba(0,0,0,0.1);padding:12px;text-align:center;cursor:pointer;transition:transform .1s}
+.card:hover{transform:scale(1.03)}
+.card img.thumb{width:100%;height:130px;object-fit:contain;background:#eef; border-radius:12px;padding:6px}
+.card h3{margin:10px 0;font-size:1.1rem}
+.badge-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.badge{padding:3px 8px;border-radius:8px;font-size:0.75rem;background:#eee}
+.badge.cp{background:#ffe9f0}
+.badge.ce1{background:#e4f8ff}
+.badge.ce2{background:#e8ffe4}
+.badge.cm1{background:#fff2dd}
+.badge.cm2{background:#f3e9ff}
+.admin-panel{display:none;padding:20px;background:#fffbe6;border-top:4px solid #ffcc00}
+</style>
+</head>
+<body>
+<header>
+<h1>Salle informatique</h1>
+<button id="teacherLoginBtn" style="padding:10px 14px;border-radius:10px;border:none;cursor:pointer">🔐 Enseignant</button>
+</header>
+<div id="filters"></div>
+<div id="links"></div>
+<div class="admin-panel" id="adminPanel">
+<h2>Gestion des liens</h2>
+<p>À venir : interface complète (ajout / modification / suppression)</p>
+</div>
+<script>
+const TEACHER_PASSWORD = "enseignant";
+const categories = [
+ {name:"CP",icon:"https://cdn-icons-png.flaticon.com/512/201/201623.png"},
+ {name:"CE1",icon:"https://cdn-icons-png.flaticon.com/512/2907/2907253.png"},
+ {name:"CE2",icon:"https://cdn-icons-png.flaticon.com/512/1903/1903162.png"},
+ {name:"CM1",icon:"https://cdn-icons-png.flaticon.com/512/1345/1345874.png"},
+ {name:"CM2",icon:"https://cdn-icons-png.flaticon.com/512/1345/1345883.png"}
+];
+const DEFAULT_IMG = "https://cdn-icons-png.flaticon.com/512/2015/2015758.png";
+let links = [
+ {title:"Jeux Lecture CP",url:"https://www.logicieleducatif.fr/lecture/",img:"https://cdn-icons-png.flaticon.com/512/3003/3003035.png",cats:["CP"]},
+ {title:"Maths CP",url:"https://www.logicieleducatif.fr/math/",img:"https://cdn-icons-png.flaticon.com/512/990/990413.png",cats:["CP"]},
+ {title:"Coloriages",url:"https://www.coloriages.fr/",img:"https://cdn-icons-png.flaticon.com/512/3595/3595455.png",cats:["CP","CE1"]},
+ {title:"Lecture CE1",url:"https://www.logicieleducatif.fr/lecture/ce1.php",img:"https://cdn-icons-png.flaticon.com/512/3003/3003035.png",cats:["CE1"]},
+ {title:"Maths CE1",url:"https://www.logicieleducatif.fr/math/ce1.php",img:"https://cdn-icons-png.flaticon.com/512/990/990413.png",cats:["CE1"]},
+ {title:"Exercices CE2",url:"https://www.logicieleducatif.fr/",img:"https://cdn-icons-png.flaticon.com/512/1903/1903162.png",cats:["CE2"]},
+ {title:"Dictées CE2",url:"https://www.ladictee.fr/",img:"https://cdn-icons-png.flaticon.com/512/2917/2917995.png",cats:["CE2","CM1"]},
+ {title:"Histoire CM1",url:"https://www.lumni.fr/",img:"https://cdn-icons-png.flaticon.com/512/2942/2942756.png",cats:["CM1"]},
+ {title:"Maths CM2",url:"https://www.logicieleducatif.fr/math/cm2.php",img:"https://cdn-icons-png.flaticon.com/512/990/990413.png",cats:["CM2"]}
+];
+let activeFilter = null;
+function renderFilters(){
+ const f = document.getElementById("filters");
+ f.innerHTML="";
+ const all=document.createElement("button");
+ all.className="filter-btn"+(activeFilter===null?" active":"");
+ all.textContent="Tous";
+ all.onclick=()=>{activeFilter=null;renderFilters();renderLinks();};
+ f.appendChild(all);
+ categories.forEach(c=>{
+ const b=document.createElement("button");
+ b.className="filter-btn"+(activeFilter===c.name?" active":"");
+ b.innerHTML=`<img class="category-icon" src="${c.icon}"> ${c.name}`;
+ b.onclick=()=>{activeFilter=c.name;renderFilters();renderLinks();};
+ f.appendChild(b);
+ });
+}
+function renderLinks(){
+ const container=document.getElementById("links");
+ container.innerHTML="";
+ links.filter(l=>!activeFilter||l.cats.includes(activeFilter)).forEach(l=>{
+ const card=document.createElement("div");
+ card.className="card";
+ card.onclick=()=>window.open(l.url,"_blank");
+ card.innerHTML=`
+ <img class="thumb" src="${l.img||DEFAULT_IMG}">
+ <h3>${l.title}</h3>
+ <div class="badge-row">
+ ${l.cats.map(c=>`<span class='badge ${c.toLowerCase()}'>${c}</span>`).join("")}
+ </div>`;
+ container.appendChild(card);
+ });
+}
+document.getElementById("teacherLoginBtn").onclick=()=>{
+ const pass=prompt("Mot de passe enseignant :");
+ if(pass===TEACHER_PASSWORD){document.getElementById("adminPanel").style.display="block";alert("Mode enseignant activé")}
+ else alert("Mot de passe incorrect");
+};
+renderFilters();renderLinks();
+</script>
+</body>
+</html>
