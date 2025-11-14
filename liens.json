@@ -1,0 +1,16 @@
+{
+  "links": [
+    {
+      "title": "Jeux Lecture CP",
+      "url": "https://www.logicieleducatif.fr/lecture/",
+      "img": "https://cdn-icons-png.flaticon.com/512/3003/3003035.png",
+      "cats": ["CP"]
+    },
+    {
+      "title": "Maths CP",
+      "url": "https://www.logicieleducatif.fr/math/",
+      "img": "https://cdn-icons-png.flaticon.com/512/990/990413.png",
+      "cats": ["CP"]
+    }
+  ]
+}
