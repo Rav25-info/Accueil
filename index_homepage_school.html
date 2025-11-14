@@ -97,8 +97,30 @@
             { name: "CM2", icon: "https://cdn-icons-png.flaticon.com/512/1345/1345883.png" }
         ]; // Temp
         const links = [
-            { title: "Site Mathématiques", url: "https://exemple.com", img: "https://via.placeholder.com/200", cats: ["CP", "CE1"] },
-            { title: "Lecture", url: "https://exemple.com", img: "https://via.placeholder.com/200", cats: ["CE2", "CM1", "CM2"] }
+            // CP
+            { title: "Jeux Lecture CP", url: "https://www.logicieleducatif.fr/lecture/", img: "https://cdn-icons-png.flaticon.com/512/3003/3003035.png", cats: ["CP"] },
+            { title: "Maths CP", url: "https://www.logicieleducatif.fr/math/", img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CP"] },
+            { title: "Coloriages", url: "https://www.coloriages.fr/", img: "https://cdn-icons-png.flaticon.com/512/3595/3595455.png", cats: ["CP"] },
+
+            // CE1
+            { title: "Lecture CE1", url: "https://www.logicieleducatif.fr/lecture/ce1.php", img: "https://cdn-icons-png.flaticon.com/512/3003/3003035.png", cats: ["CE1"] },
+            { title: "Maths CE1", url: "https://www.logicieleducatif.fr/math/ce1.php", img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CE1"] },
+            { title: "Géométrie CE1", url: "https://www.logicieleducatif.fr/geo/", img: "https://cdn-icons-png.flaticon.com/512/2942/2942800.png", cats: ["CE1"] },
+
+            // CE2
+            { title: "Exercices CE2", url: "https://www.logicieleducatif.fr/", img: "https://cdn-icons-png.flaticon.com/512/1903/1903162.png", cats: ["CE2"] },
+            { title: "Dictées CE2", url: "https://www.ladictee.fr/", img: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png", cats: ["CE2"] },
+            { title: "Quiz CE2", url: "https://www.quiziniere.com/", img: "https://cdn-icons-png.flaticon.com/512/4144/4144720.png", cats: ["CE2"] },
+
+            // CM1
+            { title: "Histoire CM1", url: "https://www.lumni.fr/", img: "https://cdn-icons-png.flaticon.com/512/2942/2942756.png", cats: ["CM1"] },
+            { title: "Maths CM1", url: "https://www.logicieleducatif.fr/math/cm1.php", img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CM1"] },
+            { title: "Géographie CM1", url: "https://www.edugeo.fr/", img: "https://cdn-icons-png.flaticon.com/512/2995/2995620.png", cats: ["CM1"] },
+
+            // CM2
+            { title: "Sciences CM2", url: "https://www.lumni.fr/", img: "https://cdn-icons-png.flaticon.com/512/2942/2942789.png", cats: ["CM2"] },
+            { title: "Maths CM2", url: "https://www.logicieleducatif.fr/math/cm2.php", img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CM2"] },
+            { title: "Français CM2", url: "https://www.ladictee.fr/", img: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png", cats: ["CM2"] }
         ];
 
         function renderFilters() {
@@ -122,7 +144,7 @@
                     const card = document.createElement("div");
                     card.className = "card";
                     card.innerHTML = `
-                        <img src="${l.img}" alt="preview">
+                        <img src="https://via.placeholder.com/200x120.png?text=Site" alt="image">
                         <h3>${l.title}</h3>
                         <a href="${l.url}" target="_blank">${l.url.replace('https://','').replace('http://','')}</a>
                     `;
