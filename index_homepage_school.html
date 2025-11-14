@@ -3,167 +3,769 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Accueil Salle Informatique</title>
+    <title>Accueil – Salle informatique</title>
     <style>
+        :root {
+            --bleu: #4f8cff;
+            --bleu-clair: #e4f0ff;
+            --jaune: #ffd766;
+            --vert: #4cc38a;
+            --rouge: #ff6b6b;
+            --violet: #a06bff;
+            --fond: #f5f7fb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fa;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--fond);
+            color: #222;
         }
+
         header {
-            background: #66c2ff;
+            background: linear-gradient(135deg, #4f8cff, #7f5dff);
             color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 2rem;
-        }
-        #filters {
+            padding: 18px 20px 14px;
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            padding: 15px;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        header .title-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            margin: 0;
+        }
+
+        header p {
+            margin: 2px 0 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .logo-circle {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
             justify-content: center;
+            font-size: 1.8rem;
         }
-        .filter-btn {
-            padding: 10px 15px;
-            background: #ffd966;
-            border-radius: 10px;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-        }
-        #links {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-        .card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 10px;
-            text-align: center;
-        }
-        .card img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-        .admin-panel {
-            display: none;
-            padding: 20px;
-            background: #eee;
-            border-top: 3px solid #ccc;
-        }
+
         .login-panel {
             text-align: right;
-            padding: 10px;
+            margin: 8px 16px 0;
         }
-    </style>
-    <style>
-        .category-icon {
-            width: 40px;
-            vertical-align: middle;
-            margin-right: 8px;
+
+        button {
+            font-family: inherit;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+            box-shadow: none;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #444;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary span {
+            font-size: 1.1rem;
+        }
+
+        .btn-danger {
+            background: #ffe5e5;
+            color: #a62222;
+        }
+
+        .btn-secondary {
+            background: var(--bleu-clair);
+            color: #2551a8;
+        }
+
+        main {
+            padding: 10px 16px 40px;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        /* Filtres */
+        #filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0 16px;
+        }
+
+        .filter-btn {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: none;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            transition: background 0.15s, transform 0.08s, box-shadow 0.08s;
+        }
+
+        .filter-btn img.category-icon {
+            width: 26px;
+            height: 26px;
+        }
+
+        .filter-btn.active {
+            background: var(--jaune);
+            box-shadow: 0 3px 7px rgba(0,0,0,0.16);
+            transform: translateY(-1px);
+        }
+
+        .filter-btn.all {
+            background: #fff4d6;
+        }
+
+        /* Grille de liens */
+        #links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            padding: 10px 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card img.thumb {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            background: #f0f4ff;
+            border-radius: 14px;
+            padding: 6px;
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            margin: 4px 2px;
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #2551a8;
+            font-weight: 600;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .card .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            background: #eef2ff;
+            color: #333;
+        }
+
+        .badge.cp { background: #ffe9f0; }
+        .badge.ce1 { background: #e4f8ff; }
+        .badge.ce2 { background: #e8ffe4; }
+        .badge.cm1 { background: #fff2dd; }
+        .badge.cm2 { background: #f3e9ff; }
+
+        .card .edit-row {
+            display: none; /* visible seulement en mode enseignant */
+            margin-top: 6px;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+
+        .card.teacher-mode .edit-row {
+            display: flex;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 24px 10px;
+            font-size: 0.95rem;
+            opacity: 0.7;
+        }
+
+        /* Panneau admin */
+        .admin-panel {
+            display: none;
+            margin-top: 24px;
+            padding: 16px 14px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .admin-panel h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-panel h2 span {
+            font-size: 1.4rem;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+            gap: 16px;
+        }
+
+        .field-group {
+            margin-bottom: 10px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .field-group input,
+        .field-group select,
+        .field-group textarea {
+            width: 100%;
+            padding: 7px 9px;
+            border-radius: 10px;
+            border: 1px solid #d3d8e5;
+            font-size: 0.9rem;
+        }
+
+        .categories-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        .categories-checkboxes label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .admin-list {
+            max-height: 260px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid #e0e4f0;
+            padding: 8px;
+            font-size: 0.85rem;
+        }
+
+        .admin-link-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 2px;
+            border-bottom: 1px solid #f0f0f8;
+        }
+
+        .admin-link-item:last-child {
+            border-bottom: none;
+        }
+
+        .admin-link-item-title {
+            font-weight: 600;
+        }
+
+        .admin-link-item small {
+            display: block;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 800px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <header>Accueil Salle Informatique</header>
-
-    <div class="login-panel">
-        <button onclick="showLogin()">Connexion enseignant</button>
+<header>
+    <div class="title-block">
+        <div class="logo-circle">💻</div>
+        <div>
+            <h1>Salle informatique</h1>
+            <p>Choisis ta classe et clique sur un site&nbsp;!</p>
+        </div>
     </div>
+    <button id="teacherLoginBtn" class="btn btn-primary">
+        <span>🔐</span> Mode enseignant
+    </button>
+</header>
 
-    <div id="filters"></div>
+<main>
+    <section>
+        <div id="filters"></div>
+        <div id="links"></div>
+        <div id="emptyMessage" class="empty-state" style="display:none;">
+            Aucun lien pour cette catégorie pour l’instant. Demande à ton enseignant 😊
+        </div>
+    </section>
 
-    <div id="links"></div>
+    <section class="admin-panel" id="adminPanel">
+        <h2><span>🧑‍🏫</span> Zone enseignant</h2>
+        <div class="admin-grid">
+            <!-- Formulaire lien -->
+            <div>
+                <h3>Ajouter / modifier un lien</h3>
+                <div class="field-group">
+                    <label for="linkTitle">Titre du lien</label>
+                    <input type="text" id="linkTitle" placeholder="Ex : Jeux de maths CE1">
+                </div>
+                <div class="field-group">
+                    <label for="linkUrl">Adresse du site (URL)</label>
+                    <input type="url" id="linkUrl" placeholder="https://...">
+                </div>
+                <div class="field-group">
+                    <label for="linkImg">Adresse de l’image (optionnel)</label>
+                    <input type="url" id="linkImg" placeholder="https://image.png (ou laisser vide)">
+                </div>
+                <div class="field-group">
+                    <label>Classes associées</label>
+                    <div class="categories-checkboxes" id="linkCategories"></div>
+                </div>
+                <div class="field-group">
+                    <button id="saveLinkBtn" class="btn btn-secondary">💾 Enregistrer le lien</button>
+                    <button id="clearFormBtn" class="btn btn-danger">✖ Annuler / Nouveau</button>
+                </div>
+            </div>
 
-    <div class="admin-panel" id="adminPanel">
-        <h2>Administration</h2>
-        <p>Ajouter / Modifier / Supprimer des catégories et liens (placeholder)</p>
-    </div>
+            <!-- Liste des liens -->
+            <div>
+                <h3>Liens existants</h3>
+                <div id="adminLinksList" class="admin-list"></div>
+            </div>
+        </div>
+        <p style="font-size:0.8rem; opacity:0.7; margin-top:10px;">
+            Les liens sont enregistrés dans ce navigateur (localStorage).  
+            Pour une salle avec plusieurs ordinateurs, il faudra configurer une fois sur chaque poste.
+        </p>
+    </section>
+</main>
 
-    <script>
-        let password = "enseignant"; // À sécuriser côté serveur dans un vrai environnement
+<script>
+    // Mot de passe enseignant (simple, côté client uniquement)
+    const TEACHER_PASSWORD = "enseignant";
 
-        const categories = [
-            { name: "CP", icon: "https://cdn-icons-png.flaticon.com/512/201/201623.png" },
-            { name: "CE1", icon: "https://cdn-icons-png.flaticon.com/512/2907/2907253.png" },
-            { name: "CE2", icon: "https://cdn-icons-png.flaticon.com/512/2995/2995620.png" },
-            { name: "CM1", icon: "https://cdn-icons-png.flaticon.com/512/1345/1345874.png" },
-            { name: "CM2", icon: "https://cdn-icons-png.flaticon.com/512/1345/1345883.png" }
-        ]; // Temp
-        const links = [
-            // CP
-            { title: "Jeux Lecture CP", url: "https://www.logicieleducatif.fr/lecture/", img: "https://cdn-icons-png.flaticon.com/512/3003/3003035.png", cats: ["CP"] },
-            { title: "Maths CP", url: "https://www.logicieleducatif.fr/math/", img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CP"] },
-            { title: "Coloriages", url: "https://www.coloriages.fr/", img: "https://cdn-icons-png.flaticon.com/512/3595/3595455.png", cats: ["CP"] },
+    // Données par défaut
+    const defaultCategories = [
+        { name: "CP",  icon: "https://cdn-icons-png.flaticon.com/512/201/201623.png" },
+        { name: "CE1", icon: "https://cdn-icons-png.flaticon.com/512/2907/2907253.png" },
+        { name: "CE2", icon: "https://cdn-icons-png.flaticon.com/512/1903/1903162.png" },
+        { name: "CM1", icon: "https://cdn-icons-png.flaticon.com/512/1345/1345874.png" },
+        { name: "CM2", icon: "https://cdn-icons-png.flaticon.com/512/1345/1345883.png" }
+    ];
 
-            // CE1
-            { title: "Lecture CE1", url: "https://www.logicieleducatif.fr/lecture/ce1.php", img: "https://cdn-icons-png.flaticon.com/512/3003/3003035.png", cats: ["CE1"] },
-            { title: "Maths CE1", url: "https://www.logicieleducatif.fr/math/ce1.php", img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CE1"] },
-            { title: "Géométrie CE1", url: "https://www.logicieleducatif.fr/geo/", img: "https://cdn-icons-png.flaticon.com/512/2942/2942800.png", cats: ["CE1"] },
+    const defaultLinks = [
+        // CP
+        { title: "Jeux Lecture CP", url: "https://www.logicieleducatif.fr/lecture/", img: "https://cdn-icons-png.flaticon.com/512/3003/3003035.png", cats: ["CP"] },
+        { title: "Maths CP",        url: "https://www.logicieleducatif.fr/math/",    img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CP"] },
+        { title: "Coloriages",      url: "https://www.coloriages.fr/",               img: "https://cdn-icons-png.flaticon.com/512/3595/3595455.png", cats: ["CP","CE1"] },
 
-            // CE2
-            { title: "Exercices CE2", url: "https://www.logicieleducatif.fr/", img: "https://cdn-icons-png.flaticon.com/512/1903/1903162.png", cats: ["CE2"] },
-            { title: "Dictées CE2", url: "https://www.ladictee.fr/", img: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png", cats: ["CE2"] },
-            { title: "Quiz CE2", url: "https://www.quiziniere.com/", img: "https://cdn-icons-png.flaticon.com/512/4144/4144720.png", cats: ["CE2"] },
+        // CE1
+        { title: "Lecture CE1", url: "https://www.logicieleducatif.fr/lecture/ce1.php", img: "https://cdn-icons-png.flaticon.com/512/3003/3003035.png", cats: ["CE1"] },
+        { title: "Maths CE1",   url: "https://www.logicieleducatif.fr/math/ce1.php",    img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CE1"] },
+        { title: "Géométrie",   url: "https://www.logicieleducatif.fr/geo/",           img: "https://cdn-icons-png.flaticon.com/512/2942/2942800.png", cats: ["CE1","CE2"] },
 
-            // CM1
-            { title: "Histoire CM1", url: "https://www.lumni.fr/", img: "https://cdn-icons-png.flaticon.com/512/2942/2942756.png", cats: ["CM1"] },
-            { title: "Maths CM1", url: "https://www.logicieleducatif.fr/math/cm1.php", img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CM1"] },
-            { title: "Géographie CM1", url: "https://www.edugeo.fr/", img: "https://cdn-icons-png.flaticon.com/512/2995/2995620.png", cats: ["CM1"] },
+        // CE2
+        { title: "Exercices CE2", url: "https://www.logicieleducatif.fr/", img: "https://cdn-icons-png.flaticon.com/512/1903/1903162.png", cats: ["CE2"] },
+        { title: "Dictées CE2",  url: "https://www.ladictee.fr/",          img: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png", cats: ["CE2","CM1"] },
+        { title: "Quiz CE2",     url: "https://www.quiziniere.com/",       img: "https://cdn-icons-png.flaticon.com/512/4144/4144720.png", cats: ["CE2"] },
 
-            // CM2
-            { title: "Sciences CM2", url: "https://www.lumni.fr/", img: "https://cdn-icons-png.flaticon.com/512/2942/2942789.png", cats: ["CM2"] },
-            { title: "Maths CM2", url: "https://www.logicieleducatif.fr/math/cm2.php", img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CM2"] },
-            { title: "Français CM2", url: "https://www.ladictee.fr/", img: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png", cats: ["CM2"] }
-        ];
+        // CM1
+        { title: "Histoire CM1",   url: "https://www.lumni.fr/",                   img: "https://cdn-icons-png.flaticon.com/512/2942/2942756.png", cats: ["CM1"] },
+        { title: "Maths CM1",      url: "https://www.logicieleducatif.fr/math/cm1.php", img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CM1"] },
+        { title: "Géographie CM1", url: "https://www.edugeo.fr/",                 img: "https://cdn-icons-png.flaticon.com/512/2995/2995620.png", cats: ["CM1","CM2"] },
 
-        function renderFilters() {
-            const f = document.getElementById("filters");
-            f.innerHTML = "";
-            categories.forEach(c => {
-                const b = document.createElement("button");
-                b.className = "filter-btn";
-                b.innerHTML = `<img class="category-icon" src="${c.icon}">${c.name}`;
-                b.onclick = () => renderLinks(c.name);
-                f.appendChild(b);
-            });
-        }
+        // CM2
+        { title: "Sciences CM2",  url: "https://www.lumni.fr/",                    img: "https://cdn-icons-png.flaticon.com/512/2942/2942789.png", cats: ["CM2"] },
+        { title: "Maths CM2",     url: "https://www.logicieleducatif.fr/math/cm2.php", img: "https://cdn-icons-png.flaticon.com/512/990/990413.png", cats: ["CM2"] },
+        { title: "Français CM2",  url: "https://www.ladictee.fr/",                img: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png", cats: ["CM2"] }
+    ];
 
-        function renderLinks(filter = null) {
-            const container = document.getElementById("links");
-            container.innerHTML = "";
-            links
-                .filter(l => !filter || l.cats.includes(filter))
-                .forEach(l => {
-                    const card = document.createElement("div");
-                    card.className = "card";
-                    card.innerHTML = `
-                        <img src="https://via.placeholder.com/200x120.png?text=Site" alt="image">
-                        <h3>${l.title}</h3>
-                        <a href="${l.url}" target="_blank">${l.url.replace('https://','').replace('http://','')}</a>
-                    `;
-                    container.appendChild(card);
-                });
-        }
+    let categories = [];
+    let links = [];
+    let activeFilter = "Tous";
+    let teacherMode = false;
+    let editingIndex = null; // index du lien en cours de modification
 
-        function showLogin() {
-            const pass = prompt("Mot de passe enseignant :");
-            if (pass === password) {
-                document.getElementById("adminPanel").style.display = "block";
-                alert("Mode enseignant activé");
-            } else {
-                alert("Mot de passe incorrect");
+    const filtersDiv = document.getElementById("filters");
+    const linksDiv   = document.getElementById("links");
+    const emptyMsg   = document.getElementById("emptyMessage");
+    const adminPanel = document.getElementById("adminPanel");
+
+    const teacherLoginBtn = document.getElementById("teacherLoginBtn");
+    const linkTitleInput  = document.getElementById("linkTitle");
+    const linkUrlInput    = document.getElementById("linkUrl");
+    const linkImgInput    = document.getElementById("linkImg");
+    const linkCatsDiv     = document.getElementById("linkCategories");
+    const saveLinkBtn     = document.getElementById("saveLinkBtn");
+    const clearFormBtn    = document.getElementById("clearFormBtn");
+    const adminLinksList  = document.getElementById("adminLinksList");
+
+    const DEFAULT_IMG = "https://via.placeholder.com/200x120.png?text=Site";
+
+    function loadData() {
+        const storedCats = localStorage.getItem("ecoleCategories");
+        const storedLinks = localStorage.getItem("ecoleLinks");
+
+        if (storedCats) {
+            try {
+                categories = JSON.parse(storedCats);
+            } catch {
+                categories = defaultCategories.slice();
             }
+        } else {
+            categories = defaultCategories.slice();
         }
 
-        renderFilters();
+        if (storedLinks) {
+            try {
+                links = JSON.parse(storedLinks);
+            } catch {
+                links = defaultLinks.slice();
+            }
+        } else {
+            links = defaultLinks.slice();
+        }
+    }
+
+    function saveData() {
+        localStorage.setItem("ecoleCategories", JSON.stringify(categories));
+        localStorage.setItem("ecoleLinks", JSON.stringify(links));
+    }
+
+    function getHostname(url) {
+        try {
+            const u = new URL(url);
+            return u.hostname.replace(/^www\./, "");
+        } catch {
+            return url;
+        }
+    }
+
+    function renderFilters() {
+        filtersDiv.innerHTML = "";
+
+        // Bouton "Tous"
+        const allBtn = document.createElement("button");
+        allBtn.className = "filter-btn all" + (activeFilter === "Tous" ? " active" : "");
+        allBtn.textContent = "Tous les sites";
+        allBtn.onclick = () => {
+            activeFilter = "Tous";
+            renderFilters();
+            renderLinks();
+        };
+        filtersDiv.appendChild(allBtn);
+
+        categories.forEach(cat => {
+            const btn = document.createElement("button");
+            btn.className = "filter-btn" + (activeFilter === cat.name ? " active" : "");
+            btn.innerHTML = `<img class="category-icon" src="${cat.icon}" alt="${cat.name}"> ${cat.name}`;
+            btn.onclick = () => {
+                activeFilter = cat.name;
+                renderFilters();
+                renderLinks();
+            };
+            filtersDiv.appendChild(btn);
+        });
+
+        // cases à cocher dans le formulaire enseignant
+        linkCatsDiv.innerHTML = "";
+        categories.forEach(cat => {
+            const id = "cat-" + cat.name;
+            const label = document.createElement("label");
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = cat.name;
+            checkbox.id = id;
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(cat.name));
+            linkCatsDiv.appendChild(label);
+        });
+    }
+
+    function renderLinks() {
+        linksDiv.innerHTML = "";
+        let filtered = links;
+
+        if (activeFilter !== "Tous") {
+            filtered = links.filter(l => Array.isArray(l.cats) && l.cats.includes(activeFilter));
+        }
+
+        if (filtered.length === 0) {
+            emptyMsg.style.display = "block";
+            return;
+        } else {
+            emptyMsg.style.display = "none";
+        }
+
+        filtered.forEach(link => {
+            const card = document.createElement("div");
+            card.className = "card";
+            if (teacherMode) {
+                card.classList.add("teacher-mode");
+            }
+
+            const img = document.createElement("img");
+            img.className = "thumb";
+            img.src = link.img || DEFAULT_IMG;
+            img.alt = link.title;
+            card.appendChild(img);
+
+            const titleEl = document.createElement("h3");
+            titleEl.textContent = link.title;
+            card.appendChild(titleEl);
+
+            const a = document.createElement("a");
+            a.href = link.url;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            a.textContent = getHostname(link.url);
+            card.appendChild(a);
+
+            const badgeRow = document.createElement("div");
+            badgeRow.className = "badge-row";
+            (link.cats || []).forEach(cn => {
+                const b = document.createElement("span");
+                const cls = cn.toLowerCase();
+                b.className = "badge " + cls;
+                b.textContent = cn;
+                badgeRow.appendChild(b);
+            });
+            card.appendChild(badgeRow);
+
+            if (teacherMode) {
+                const editRow = document.createElement("div");
+                editRow.className = "edit-row";
+
+                const editBtn = document.createElement("button");
+                editBtn.className = "btn btn-secondary";
+                editBtn.textContent = "Modifier";
+                editBtn.onclick = () => {
+                    const index = links.indexOf(link);
+                    startEditLink(index);
+                };
+
+                const delBtn = document.createElement("button");
+                delBtn.className = "btn btn-danger";
+                delBtn.textContent = "Supprimer";
+                delBtn.onclick = () => {
+                    const index = links.indexOf(link);
+                    if (index !== -1 && confirm("Supprimer ce lien ?")) {
+                        links.splice(index, 1);
+                        saveData();
+                        renderLinks();
+                        renderAdminList();
+                    }
+                };
+
+                editRow.appendChild(editBtn);
+                editRow.appendChild(delBtn);
+                card.appendChild(editRow);
+            }
+
+            linksDiv.appendChild(card);
+        });
+    }
+
+    function renderAdminList() {
+        adminLinksList.innerHTML = "";
+        if (links.length === 0) {
+            adminLinksList.textContent = "Aucun lien enregistré.";
+            return;
+        }
+        links.forEach((link, index) => {
+            const row = document.createElement("div");
+            row.className = "admin-link-item";
+
+            const left = document.createElement("div");
+            const title = document.createElement("div");
+            title.className = "admin-link-item-title";
+            title.textContent = link.title;
+            const small = document.createElement("small");
+            small.textContent = getHostname(link.url) + " – " + (link.cats || []).join(", ");
+            left.appendChild(title);
+            left.appendChild(small);
+
+            const right = document.createElement("div");
+            const editBtn = document.createElement("button");
+            editBtn.className = "btn btn-secondary";
+            editBtn.style.padding = "4px 8px";
+            editBtn.textContent = "✏️";
+            editBtn.onclick = () => startEditLink(index);
+
+            const delBtn = document.createElement("button");
+            delBtn.className = "btn btn-danger";
+            delBtn.style.padding = "4px 8px";
+            delBtn.textContent = "🗑️";
+            delBtn.onclick = () => {
+                if (confirm("Supprimer ce lien ?")) {
+                    links.splice(index, 1);
+                    saveData();
+                    renderLinks();
+                    renderAdminList();
+                }
+            };
+
+            right.appendChild(editBtn);
+            right.appendChild(delBtn);
+
+            row.appendChild(left);
+            row.appendChild(right);
+            adminLinksList.appendChild(row);
+        });
+    }
+
+    function clearForm() {
+        editingIndex = null;
+        linkTitleInput.value = "";
+        linkUrlInput.value = "";
+        linkImgInput.value = "";
+        Array.from(linkCatsDiv.querySelectorAll("input[type=checkbox]")).forEach(cb => cb.checked = false);
+        saveLinkBtn.textContent = "💾 Enregistrer le lien";
+    }
+
+    function startEditLink(index) {
+        const link = links[index];
+        editingIndex = index;
+        linkTitleInput.value = link.title || "";
+        linkUrlInput.value = link.url || "";
+        linkImgInput.value = link.img || "";
+        Array.from(linkCatsDiv.querySelectorAll("input[type=checkbox]")).forEach(cb => {
+            cb.checked = Array.isArray(link.cats) && link.cats.includes(cb.value);
+        });
+        saveLinkBtn.textContent = "✅ Mettre à jour le lien";
+        linkTitleInput.focus();
+        window.scrollTo({ top: adminPanel.offsetTop - 20, behavior: "smooth" });
+    }
+
+    function saveLinkFromForm() {
+        const title = linkTitleInput.value.trim();
+        const url   = linkUrlInput.value.trim();
+        const img   = linkImgInput.value.trim();
+
+        const selectedCats = Array.from(
+            linkCatsDiv.querySelectorAll("input[type=checkbox]:checked")
+        ).map(cb => cb.value);
+
+        if (!title || !url || selectedCats.length === 0) {
+            alert("Merci de remplir le titre, l’URL et au moins une classe.");
+            return;
+        }
+
+        const newLink = {
+            title,
+            url,
+            img: img || "",
+            cats: selectedCats
+        };
+
+        if (editingIndex !== null) {
+            links[editingIndex] = newLink;
+        } else {
+            links.push(newLink);
+        }
+
+        saveData();
+        clearForm();
         renderLinks();
-    </script>
+        renderAdminList();
+    }
+
+    function setTeacherMode(enabled) {
+        teacherMode = enabled;
+        if (teacherMode) {
+            adminPanel.style.display = "block";
+            teacherLoginBtn.textContent = "Quitter le mode enseignant";
+            teacherLoginBtn.classList.remove("btn-primary");
+            teacherLoginBtn.classList.add("btn-danger");
+        } else {
+            adminPanel.style.display = "none";
+            teacherLoginBtn.innerHTML = '<span>🔐</span> Mode enseignant';
+            teacherLoginBtn.classList.add("btn-primary");
+            teacherLoginBtn.classList.remove("btn-danger");
+        }
+        renderLinks();
+    }
+
+    // Événements
+    teacherLoginBtn.addEventListener("click", () => {
+        if (teacherMode) {
+            if (confirm("Quitter le mode enseignant ?")) {
+                setTeacherMode(false);
+            }
+            return;
+        }
+        const pass = prompt("Mot de passe enseignant :");
+        if (pass === TEACHER_PASSWORD) {
+            setTeacherMode(true);
+            renderAdminList();
+        } else if (pass !== null) {
+            alert("Mot de passe incorrect.");
+        }
+    });
+
+    saveLinkBtn.addEventListener("click", saveLinkFromForm);
+    clearFormBtn.addEventListener("click", clearForm);
+
+    // Initialisation
+    loadData();
+    renderFilters();
+    renderLinks();
+</script>
 </body>
 </html>
