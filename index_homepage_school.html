@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accueil Salle Informatique</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+        }
+        header {
+            background: #66c2ff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 2rem;
+        }
+        #filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 15px;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 10px 15px;
+            background: #ffd966;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        #links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 10px;
+            text-align: center;
+        }
+        .card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .admin-panel {
+            display: none;
+            padding: 20px;
+            background: #eee;
+            border-top: 3px solid #ccc;
+        }
+        .login-panel {
+            text-align: right;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>Accueil Salle Informatique</header>
+
+    <div class="login-panel">
+        <button onclick="showLogin()">Connexion enseignant</button>
+    </div>
+
+    <div id="filters"></div>
+
+    <div id="links"></div>
+
+    <div class="admin-panel" id="adminPanel">
+        <h2>Administration</h2>
+        <p>Ajouter / Modifier / Supprimer des catégories et liens (placeholder)</p>
+    </div>
+
+    <script>
+        let password = "enseignant"; // À sécuriser côté serveur dans un vrai environnement
+
+        const categories = ["CP", "CE1", "CE2", "CM1", "CM2"]; // Temp
+        const links = [
+            { title: "Site Mathématiques", url: "https://exemple.com", img: "https://via.placeholder.com/200", cats: ["CP", "CE1"] },
+            { title: "Lecture", url: "https://exemple.com", img: "https://via.placeholder.com/200", cats: ["CE2", "CM1", "CM2"] }
+        ];
+
+        function renderFilters() {
+            const f = document.getElementById("filters");
+            f.innerHTML = "";
+            categories.forEach(c => {
+                const b = document.createElement("button");
+                b.className = "filter-btn";
+                b.textContent = c;
+                b.onclick = () => renderLinks(c);
+                f.appendChild(b);
+            });
+        }
+
+        function renderLinks(filter = null) {
+            const container = document.getElementById("links");
+            container.innerHTML = "";
+            links
+                .filter(l => !filter || l.cats.includes(filter))
+                .forEach(l => {
+                    const card = document.createElement("div");
+                    card.className = "card";
+                    card.innerHTML = `
+                        <img src="${l.img}" alt="preview">
+                        <h3>${l.title}</h3>
+                        <a href="${l.url}" target="_blank">${l.url.replace('https://','').replace('http://','')}</a>
+                    `;
+                    container.appendChild(card);
+                });
+        }
+
+        function showLogin() {
+            const pass = prompt("Mot de passe enseignant :");
+            if (pass === password) {
+                document.getElementById("adminPanel").style.display = "block";
+                alert("Mode enseignant activé");
+            } else {
+                alert("Mot de passe incorrect");
+            }
+        }
+
+        renderFilters();
+        renderLinks();
+    </script>
+</body>
+</html>
