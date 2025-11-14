@@ -130,7 +130,7 @@
                 const b = document.createElement("button");
                 b.className = "filter-btn";
                 b.innerHTML = `<img class="category-icon" src="${c.icon}">${c.name}`;
-                b.onclick = () => renderLinks(c);
+                b.onclick = () => renderLinks(c.name);
                 f.appendChild(b);
             });
         }
