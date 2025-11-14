@@ -1,0 +1,22 @@
+name: Update Links JSON
+
+on:
+  repository_dispatch:
+    types: [update_links]
+
+jobs:
+  update-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Update liens.json
+        run: |
+          echo "${{ github.event.client_payload.links }}" > liens.json
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Mise à jour automatique de liens.json"
+          file_pattern: liens.json
